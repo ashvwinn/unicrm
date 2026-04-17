@@ -1,6 +1,8 @@
+use crate::config;
+
 #[tauri::command]
 pub async fn send_file_email(file_id: u32, client_id: u32) -> Result<(), String> {
-    let api_url = std::env::var("API_URL").expect("API_URL environment variable not set");
+    let api_url = config::api_url();
     let endpoint = format!("{}/clients/{}/files/{}/send", api_url, client_id, file_id);
 
     let client = reqwest::Client::new();
@@ -27,7 +29,7 @@ pub async fn send_file_email(file_id: u32, client_id: u32) -> Result<(), String>
 
 #[tauri::command]
 pub async fn send_category_files_email(category: String, client_id: u32) -> Result<(), String> {
-    let api_url = std::env::var("API_URL").expect("API_URL environment variable not set");
+    let api_url = config::api_url();
     let endpoint = format!("{}/clients/{}/files/send/{}", api_url, client_id, category);
 
     let client = reqwest::Client::new();

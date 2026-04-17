@@ -1,6 +1,7 @@
 use dotenv::dotenv;
 mod api_types;
 mod client_commands;
+mod config;
 mod email_commands;
 mod file_commands;
 
@@ -12,6 +13,8 @@ fn is_windows() -> bool {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     dotenv().ok();
+    config::init_config();
+
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())

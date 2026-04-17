@@ -1,5 +1,6 @@
 use crate::{
     api_types::{ClientResponse, CreateFormData, FetchClientsResponse, UpdateClientRequest},
+    config,
     file_commands::get_file_part,
 };
 use reqwest::multipart::Form;
@@ -8,7 +9,7 @@ use tokio::fs::File;
 
 #[tauri::command]
 pub async fn fetch_clients(query_params: Option<String>) -> Result<FetchClientsResponse, String> {
-    let api_url = std::env::var("API_URL").expect("API_URL environment variable not set");
+    let api_url = config::api_url();
     let query_params = query_params.unwrap_or_default();
     let endpoint = format!("{}/clients?{}", api_url, query_params);
 
@@ -37,7 +38,7 @@ pub async fn fetch_clients(query_params: Option<String>) -> Result<FetchClientsR
 
 #[tauri::command]
 pub async fn fetch_client(client_id: u32) -> Result<ClientResponse, String> {
-    let api_url = std::env::var("API_URL").expect("API_URL environment variable not set");
+    let api_url = config::api_url();
     let endpoint = format!("{}/clients/{}", api_url, client_id);
 
     let response = reqwest::get(&endpoint)
@@ -65,7 +66,7 @@ pub async fn fetch_client(client_id: u32) -> Result<ClientResponse, String> {
 
 #[tauri::command]
 pub async fn create_client(form_data: CreateFormData) -> Result<ClientResponse, String> {
-    let api_url = std::env::var("API_URL").expect("API_URL environment variable not set");
+    let api_url = config::api_url();
     let endpoint = format!("{}/clients", api_url);
 
     let client = reqwest::Client::new();
@@ -145,7 +146,7 @@ pub async fn create_client(form_data: CreateFormData) -> Result<ClientResponse, 
 
 #[tauri::command]
 pub async fn update_client(client_data: UpdateClientRequest) -> Result<(), String> {
-    let api_url = std::env::var("API_URL").expect("API_URL environment variable not set");
+    let api_url = config::api_url();
     let endpoint = format!("{}/clients/{}", api_url, client_data.id);
 
     let client = reqwest::Client::new();
@@ -173,7 +174,7 @@ pub async fn update_client(client_data: UpdateClientRequest) -> Result<(), Strin
 
 #[tauri::command]
 pub async fn delete_client(client_id: u32) -> Result<(), String> {
-    let api_url = std::env::var("API_URL").expect("API_URL environment variable not set");
+    let api_url = config::api_url();
     let endpoint = format!("{}/clients/{}", api_url, client_id);
 
     let client = reqwest::Client::new();

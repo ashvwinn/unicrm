@@ -1,3 +1,4 @@
+use crate::config;
 use std::path::PathBuf;
 
 use reqwest::multipart::Part;
@@ -15,7 +16,7 @@ pub async fn get_file_part(file: &mut File, path: PathBuf) -> Result<Part, Strin
 
 #[tauri::command]
 pub async fn add_file(client_id: u32, category: String, filepath: String) -> Result<(), String> {
-    let api_url = std::env::var("API_URL").expect("API_URL environment variable not set");
+    let api_url = config::api_url();
     let endpoint = format!("{}/clients/{}/files", api_url, client_id);
 
     let client = reqwest::Client::new();
@@ -56,7 +57,7 @@ pub async fn add_file(client_id: u32, category: String, filepath: String) -> Res
 
 #[tauri::command]
 pub async fn delete_file(file_id: u32, client_id: u32) -> Result<(), String> {
-    let api_url = std::env::var("API_URL").expect("API_URL environment variable not set");
+    let api_url = config::api_url();
     let endpoint = format!("{}/clients/{}/files/{}", api_url, client_id, file_id);
 
     let client = reqwest::Client::new();
