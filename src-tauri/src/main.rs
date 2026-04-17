@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    himwan_refrigerations_lib::run()
+    unicrm_lib::run()
 }
